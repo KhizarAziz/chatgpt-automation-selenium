@@ -1,2 +1,4 @@
 undetected_chromedriver
 fake_useragent
+selenium==4.12.0 # headless is forcefully enabled in the newer versions for undetected_chromedriver
+pyyaml

@@ -1,0 +1,31 @@
+login_page:
+  login_button:
+    selector: "button[data-testid='login-button']"
+    action: "clickable"
+  email_input:
+    selector: "input[name='username']"
+    action: "input_field"
+  next_button:
+    selector: "button._button-login-id[type='submit']"
+    action: "clickable"
+  password_input:
+    selector: "input[name='password']"
+    action: "input_field"
+  final_login_button:
+    selector: "button._button-login-password"
+    action: "clickable"
+    wait_before_action: [0.5, 2]
+
+prompt_page:
+  prompt_textarea:
+    selector: "textarea#prompt-textarea"
+    action: "input_field"
+    wait_before_action: [0.5, 2]
+  submit_prompt_button:
+    selector: "button[data-testid='send-button']"
+    action: "clickable"
+    wait_before_action: [3, 5]
+  prompt_response_elements:
+    selector: "div[data-message-id]"
+    action: "readable"
+    wait_before_action: [10, 20]
