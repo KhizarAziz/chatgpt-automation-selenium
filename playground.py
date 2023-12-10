@@ -1,4 +1,5 @@
 import undetected_chromedriver as uc
+from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
@@ -19,14 +20,16 @@ def wait_with_random_delay(delay_range=(0.5, 2.0)):
     sleep(uniform(*delay_range))
 
 # creating options for the browser to use
-op = uc.ChromeOptions()
+chrome_options = Options()
 ua = UserAgent()
-op.add_argument(f"--user-agent={ua.random}")  # adding a random agent so that we don't get blocked.
-op.add_argument('--no-first-run --no-service-autorun --password-store=basic')
-op.add_argument("--user-data-dir=./website-data-cookies-etc")
-# op.add_argument("--headless")
+chrome_options.add_argument(f"--user-agent={ua.random}")  # adding a random agent so that we don't get blocked.
+chrome_options.add_argument('--no-first-run --no-service-autorun --password-store=basic')
+chrome_options.add_argument("--user-data-dir=./website-data-cookies-etc")
+# chrome_options.add_argument("--headless")
 
-driver = uc.Chrome(options=op)
+driver = uc.Chrome(version_main=119,options=chrome_options) # creating a chrome driver object
+
+print('Chrome Driver Created')
 
 driver.get(constants.MAIN_URL)
 
@@ -55,7 +58,10 @@ def perform_action(driver, config):
         else:
             raise ValueError(f"Action type '{action_type}' not supported.")
     except Exception as e:
-        raise Exception(f"An error occurred on selector: {(config.keys())[0]} The error is ",e)
+        error_message = str(e)  # Replace this with the actual error message
+        raise ValueError(f"Action Failed on selector {selector}  with error {error_message}")
+        
+        # raise ValueError(f"Action Failed on selector {(config.keys())[0]}: with error ")
 
 
 
@@ -68,20 +74,28 @@ def perform_action(driver, config):
 config_page = selectors_config['login_page']
 
 # login
+print('login')
 perform_action(driver, config_page['login_button'])
 
+print('login with google')
+perform_action(driver, config_page['login_with_google'])
+
 # enter email
+print('enter email')
 config_page['email_input']['input_value'] = constants.MAIL
 perform_action(driver, config_page['email_input'])
 
 # click continue
+print('click continue')
 perform_action(driver, config_page['next_button'])
 
 # enter pass
+print('enter pass')
 config_page['password_input']['input_value'] = constants.PASS
 perform_action(driver, config_page['password_input'])
 
 # finally login
+print('click login')
 perform_action(driver, config_page['final_login_button'])
 
 '''
@@ -92,14 +106,16 @@ perform_action(driver, config_page['final_login_button'])
 config_page = selectors_config['prompt_page']
 
 # enter text prompt
+print('enter prompt')
 config_page['prompt_textarea']['input_value'] = "what is the value of 233 + 67?"
 perform_action(driver, config_page['prompt_textarea'])
 
-
 # sent prompt
+print('send prompt')
 perform_action(driver, config_page['submit_prompt_button'])
 
 # fetch response
+print('recv response of prompt')
 prompt_response_elements = perform_action(driver, config_page['prompt_response_elements'])
 results = [element.text for element in prompt_response_elements]
 print(results)

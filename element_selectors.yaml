@@ -2,17 +2,20 @@ login_page:
   login_button:
     selector: "button[data-testid='login-button']"
     action: "clickable"
+  login_with_google:
+    selector: "form[data-provider='google'] button[type='submit']"
+    action: "clickable"
   email_input:
-    selector: "input[name='username']"
+    selector: "input[name='identifier']"
     action: "input_field"
   next_button:
-    selector: "button._button-login-id[type='submit']"
+    selector: "button.VfPpkd-LgbsSe.VfPpkd-LgbsSe-OWXEXe-k8QpJ.VfPpkd-LgbsSe-OWXEXe-dgl2Hf.nCP5yc.AjY5Oe.DuMIQc.LQeN7.qIypjc.TrZEUc.lw1w4b[jscontroller='soHxf'][jsname='LgbsSe']"
     action: "clickable"
   password_input:
-    selector: "input[name='password']"
+    selector: "input[name='Passwd']"
     action: "input_field"
   final_login_button:
-    selector: "button._button-login-password"
+    selector: "button.VfPpkd-LgbsSe.VfPpkd-LgbsSe-OWXEXe-k8QpJ.VfPpkd-LgbsSe-OWXEXe-dgl2Hf[jscontroller='soHxf'][jsname='LgbsSe']"
     action: "clickable"
     wait_before_action: [0.5, 2]
 
