@@ -3,19 +3,19 @@ login_page:
     selector: "button[data-testid='login-button']"
     action: "clickable"
   login_with_google:
-    selector: "form[data-provider='google'] button[type='submit']"
+    selector: ".social-section .social-btn:first-of-type"
     action: "clickable"
   email_input:
     selector: "input[name='identifier']"
     action: "input_field"
   next_button:
-    selector: "button.VfPpkd-LgbsSe.VfPpkd-LgbsSe-OWXEXe-k8QpJ.VfPpkd-LgbsSe-OWXEXe-dgl2Hf.nCP5yc.AjY5Oe.DuMIQc.LQeN7.qIypjc.TrZEUc.lw1w4b[jscontroller='soHxf'][jsname='LgbsSe']"
+    selector: "button[jsname='LgbsSe']:not([jsname='YU8Bzc'])"
     action: "clickable"
   password_input:
     selector: "input[name='Passwd']"
     action: "input_field"
   final_login_button:
-    selector: "button.VfPpkd-LgbsSe.VfPpkd-LgbsSe-OWXEXe-k8QpJ.VfPpkd-LgbsSe-OWXEXe-dgl2Hf[jscontroller='soHxf'][jsname='LgbsSe']"
+    selector: "button[jsname='LgbsSe'][type='button'][id='passwordNext']"
     action: "clickable"
     wait_before_action: [0.5, 2]
 
