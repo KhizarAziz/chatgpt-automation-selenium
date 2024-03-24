@@ -25,9 +25,12 @@ ua = UserAgent()
 chrome_options.add_argument(f"--user-agent={ua.random}")  # adding a random agent so that we don't get blocked.
 chrome_options.add_argument('--no-first-run --no-service-autorun --password-store=basic')
 chrome_options.add_argument("--user-data-dir=./website-data-cookies-etc")
-# chrome_options.add_argument("--headless")
+chrome_options.add_argument("--incognito")
+chrome_options.add_argument("--headless")
 
-driver = uc.Chrome(version_main=119,options=chrome_options) # creating a chrome driver object
+# If chrome version issue, please update lib : pip install undetected-chromedriver --upgrade
+driver = uc.Chrome(options=chrome_options) # creating a chrome driver object
+
 
 print('Chrome Driver Created')
 
@@ -52,7 +55,6 @@ def perform_action(driver, config):
             text_to_input = config['input_value']
             input_field = wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, selector)))
             input_field.send_keys(text_to_input)
-        
         elif action_type == 'readable':
             return wait.until(EC.visibility_of_all_elements_located((By.CSS_SELECTOR, selector)))
         else:
