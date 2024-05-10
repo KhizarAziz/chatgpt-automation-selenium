@@ -26,8 +26,10 @@ chrome_options.add_argument(f"--user-agent={ua.random}")  # adding a random agen
 chrome_options.add_argument('--no-first-run --no-service-autorun --password-store=basic')
 chrome_options.add_argument("--user-data-dir=./website-data-cookies-etc")
 chrome_options.add_argument("--incognito")
-chrome_options.add_argument("--headless")
+# chrome_options.add_argument("--headless")
 
+
+print('Creating Chrome Driver!')
 # If chrome version issue, please update lib : pip install undetected-chromedriver --upgrade
 driver = uc.Chrome(options=chrome_options) # creating a chrome driver object
 
@@ -48,15 +50,24 @@ def perform_action(driver, config):
 
     try:
         if action_type == 'clickable':
-            button = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, selector)))
-            button.click()
+            if selector.startswith("//"):  # Indicates an XPath selector
+                button = wait.until(EC.element_to_be_clickable((By.XPATH, selector)))
+            else:  # Defaults to CSS Selector
+                button = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, selector)))
+            button.click()            
         elif action_type == 'input_field':
-            print("input value was :",config['input_value'])
+            print("input value was :", config['input_value'])
             text_to_input = config['input_value']
-            input_field = wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, selector)))
+            if selector.startswith("//"):  # Indicates an XPath selector
+                input_field = wait.until(EC.visibility_of_element_located((By.XPATH, selector)))
+            else:  # Defaults to CSS Selector
+                input_field = wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, selector)))
             input_field.send_keys(text_to_input)
-        elif action_type == 'readable':
-            return wait.until(EC.visibility_of_all_elements_located((By.CSS_SELECTOR, selector)))
+        elif action_type == 'readable':        
+            if selector.startswith("//"):  # Indicates an XPath selector
+                return wait.until(EC.visibility_of_all_elements_located((By.XPATH, selector)))
+            else:  # Defaults to CSS Selector
+                return wait.until(EC.visibility_of_all_elements_located((By.CSS_SELECTOR, selector)))
         else:
             raise ValueError(f"Action type '{action_type}' not supported.")
     except Exception as e:
