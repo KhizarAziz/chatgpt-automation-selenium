@@ -9,13 +9,13 @@ login_page:
     selector: "input[name='identifier']"
     action: "input_field"
   next_button:
-    selector: "button[jsname='LgbsSe']:not([jsname='YU8Bzc'])"
+    selector: "//div[@id='identifierNext']//button"
     action: "clickable"
   password_input:
     selector: "input[name='Passwd']"
     action: "input_field"
   final_login_button:
-    selector: "button[jsname='LgbsSe'][type='button'][id='passwordNext']"
+    selector: "//div[@id='passwordNext']//button"
     action: "clickable"
     wait_before_action: [0.5, 2]
 
