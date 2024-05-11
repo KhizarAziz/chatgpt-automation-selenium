@@ -1,24 +1,60 @@
+# Main configuration for the login page
 login_page:
+  # General login button used to initiate any login process
   login_button:
     selector: "button[data-testid='login-button']"
     action: "clickable"
-  login_with_google:
-    selector: ".social-section .social-btn:first-of-type"
-    action: "clickable"
-  email_input:
-    selector: "input[name='identifier']"
-    action: "input_field"
-  next_button:
-    selector: "//div[@id='identifierNext']//button"
-    action: "clickable"
-  password_input:
-    selector: "input[name='Passwd']"
-    action: "input_field"
-  final_login_button:
-    selector: "//div[@id='passwordNext']//button"
-    action: "clickable"
     wait_before_action: [0.5, 2]
+    
+  
+  # Configuration for logging in with Google
+  login_with_google:
+    elements:
+      # Button to initiate login with Google
+      login_with_google_button:
+        selector: ".social-section .social-btn:first-of-type"
+        action: "clickable"
+        wait_before_action: [0.5, 2]        
+      # Input field for email
+      email_input:
+        selector: "input[name='identifier']"
+        action: "input_field"
+      # Button to proceed after email is entered
+      next_button:
+        selector: "//div[@id='identifierNext']//button"
+        action: "clickable"
+        wait_before_action: [0.5, 2]
+      # Input field for password
+      password_input:
+        selector: "input[name='Passwd']"
+        action: "input_field"
+      # Final button to complete the login process
+      final_login_button:
+        selector: "//div[@id='passwordNext']//button"
+        action: "clickable"
+        wait_before_action: [0.5, 2]
 
+  # Configuration for normal login process
+  login_normal:
+    elements:
+      # Fields and buttons used in the normal login process
+      email_input:
+        selector: "input[name='email']"  # or use XPath "//input[@name='email']"
+        action: "input_field"
+      next_button:
+        selector: "//button[contains(text(), 'Continue')]"  # or use CSS "button.continue-btn"
+        action: "clickable"
+      password_input:
+        selector: "input[name='password']"  # or use XPath "//form[contains(@class, '_form-login-password')]//input[@name='password']"
+        action: "input_field"
+      final_login_button:
+        selector: "button._button-login-password[type='submit']"  # or use XPath "//form[contains(@class, '_form-login-password')]//button[@type='submit'][@name='action'][@value='default']"
+        action: "clickable"
+        wait_before_action: [0.5, 2]
+
+
+
+########################### LOGGED IN - LET'S PROMPT ##############################
 prompt_page:
   prompt_textarea:
     selector: "textarea#prompt-textarea"
