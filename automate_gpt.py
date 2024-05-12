@@ -7,7 +7,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from fake_useragent import UserAgent
 from time import sleep
 from random import uniform
-import constants
+from constants import MAIN_URL, LOGIN_METHOD, MAIL, PASS
 import yaml
 
 
@@ -36,7 +36,7 @@ driver = uc.Chrome(options=chrome_options) # creating a chrome driver object
 
 print('Chrome Driver Created')
 
-driver.get(constants.MAIN_URL)
+driver.get(MAIN_URL)
 
 # Function to perform action based on YAML config
 def perform_action(driver, config):
@@ -86,30 +86,39 @@ def perform_action(driver, config):
 
 config_page = selectors_config['login_page']
 
-# login
-print('login')
+# Click the initial login button to open the login options
+print('Click initial login button')
 perform_action(driver, config_page['login_button'])
 
-print('login with google')
-perform_action(driver, config_page['login_with_google'])
+login_method = LOGIN_METHOD  # or "login_normal" to switch the method
+# Retrieve the method elements
+method_elements = config_page[login_method]['elements']
 
-# enter email
-print('enter email')
-config_page['email_input']['input_value'] = constants.MAIL
-perform_action(driver, config_page['email_input'])
+# Start login process
+print(f'Login using {login_method.replace("_", " ").title()}')
 
-# click continue
-print('click continue')
-perform_action(driver, config_page['next_button'])
+# Click the "Login with Google" button if using Google login
+if login_method == "login_with_google":
+    perform_action(driver, method_elements['login_with_google_button'])
 
-# enter pass
-print('enter pass')
-config_page['password_input']['input_value'] = constants.PASS
-perform_action(driver, config_page['password_input'])
+# Enter email
+print('Enter email')
+method_elements['email_input']['input_value'] = MAIL
+perform_action(driver, method_elements['email_input'])
 
-# finally login
-print('click login')
-perform_action(driver, config_page['final_login_button'])
+# Click next button
+print('Click continue')
+perform_action(driver, method_elements['next_button'])
+
+# Enter password
+print('Enter password')
+method_elements['password_input']['input_value'] = PASS
+perform_action(driver, method_elements['password_input'])
+
+# Finally login
+print('Click login')
+perform_action(driver, method_elements['final_login_button'])
+
 
 '''
 ###########################################################################
@@ -128,7 +137,7 @@ print('send prompt')
 perform_action(driver, config_page['submit_prompt_button'])
 
 # fetch response
-print('recv response of prompt')
+print('recvin response. Please wait.........!')
 prompt_response_elements = perform_action(driver, config_page['prompt_response_elements'])
 results = [element.text for element in prompt_response_elements]
 print(results)
