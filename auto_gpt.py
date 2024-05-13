@@ -6,7 +6,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from fake_useragent import UserAgent
 from time import sleep
 from random import uniform
-from constants import MAIN_URL, LOGIN_METHOD, MAIL, PASS, CHROME_OPTIONS_ARGS
+from constants import MAIN_URL, LOGIN_METHOD, MAIL, PASS, CHROME_OPTIONS_ARGS, DEFAULT_WAIT_BEFORE_ACTION_TIME
 import yaml
 
 class AutoGPT:
@@ -36,8 +36,10 @@ class AutoGPT:
     def __init__(self):
         self.driver = self.setup_driver()
         self.selectors_config = self.load_yaml('element_selectors.yaml')
+        # print("Driver setup done!")
         self.driver.get(MAIN_URL)
         self.login()
+        # print("Login done!")
 
     def setup_driver(self):
         """Configures and returns a Chrome WebDriver with random user-agent and additional options from constants."""
@@ -62,7 +64,7 @@ class AutoGPT:
         wait = WebDriverWait(self.driver, 15)
         selector = config['selector']
         action_type = config['action']
-        wait_times = config.get('wait_before_action', [0, 0])
+        wait_times = config.get('wait_before_action', DEFAULT_WAIT_BEFORE_ACTION_TIME)
         self.wait_with_random_delay(wait_times)
 
         try:
