@@ -4,8 +4,7 @@ login_page:
   login_button:
     selector: "button[data-testid='login-button']"
     action: "clickable"
-    wait_before_action: [0.5, 2]
-    
+    wait_before_action: [3, 5]    
   
   # Configuration for logging in with Google
   login_with_google:
@@ -14,7 +13,7 @@ login_page:
       login_with_google_button:
         selector: ".social-section .social-btn:first-of-type"
         action: "clickable"
-        wait_before_action: [0.5, 2]        
+        wait_before_action: [3, 5]        
       # Input field for email
       email_input:
         selector: "input[name='identifier']"
@@ -23,7 +22,7 @@ login_page:
       next_button:
         selector: "//div[@id='identifierNext']//button"
         action: "clickable"
-        wait_before_action: [0.5, 2]
+        wait_before_action: [3, 5]
       # Input field for password
       password_input:
         selector: "input[name='Passwd']"
@@ -32,7 +31,7 @@ login_page:
       final_login_button:
         selector: "//div[@id='passwordNext']//button"
         action: "clickable"
-        wait_before_action: [0.5, 2]
+        wait_before_action: [3, 5]
 
   # Configuration for normal login process
   login_normal:
@@ -50,7 +49,7 @@ login_page:
       final_login_button:
         selector: "button._button-login-password[type='submit']"  # or use XPath "//form[contains(@class, '_form-login-password')]//button[@type='submit'][@name='action'][@value='default']"
         action: "clickable"
-        wait_before_action: [0.5, 2]
+        wait_before_action: [3, 5]
 
 
 
@@ -59,11 +58,11 @@ prompt_page:
   prompt_textarea:
     selector: "textarea#prompt-textarea"
     action: "input_field"
-    wait_before_action: [0.5, 2]
+    wait_before_action: [5, 7]
   submit_prompt_button:
     selector: "button[data-testid='send-button']"
     action: "clickable"
-    wait_before_action: [3, 5]
+    wait_before_action: [5, 7]
   prompt_response_elements:
     selector: "div[data-message-id]"
     action: "readable"
