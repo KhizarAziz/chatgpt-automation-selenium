@@ -19,4 +19,4 @@ LOGIN_METHOD = "login_normal" # login_with_google
 
 BASELINE_PROMPT = "Please keep the response in 100 words!" # dummy example, not used yet
 
-DEFAULT_WAIT_BEFORE_ACTION_TIME = [1, 3]
+DEFAULT_WAIT_BEFORE_ACTION_TIME = [3, 5]
