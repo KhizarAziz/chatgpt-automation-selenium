@@ -36,10 +36,10 @@ class AutoGPT:
     def __init__(self):
         self.driver = self.setup_driver()
         self.selectors_config = self.load_yaml('element_selectors.yaml')
-        # print("Driver setup done!")
+        print("Driver setup done, now logging in...!")
         self.driver.get(MAIN_URL)
         self.login()
-        # print("Login done!")
+        print("Login done, now prompting...!")
 
     def setup_driver(self):
         """Configures and returns a Chrome WebDriver with random user-agent and additional options from constants."""
