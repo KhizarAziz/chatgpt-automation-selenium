@@ -59,28 +59,43 @@ class AutoGPT:
         """Pauses the program for a random time within the given range to mimic human interaction."""
         sleep(uniform(*delay_range))
 
+    # Function to perform action based on YAML config
     def perform_action(self, config):
-        """Executes specified actions like clicking, inputting text, and reading text based on the configuration."""
         wait = WebDriverWait(self.driver, 15)
         selector = config['selector']
         action_type = config['action']
         wait_times = config.get('wait_before_action', DEFAULT_WAIT_BEFORE_ACTION_TIME)
-        self.wait_with_random_delay(wait_times)
+        self.wait_with_random_delay(wait_times) # Random wait before action
 
         try:
             if action_type == 'clickable':
-                element = wait.until(EC.element_to_be_clickable((By.XPATH, selector) if selector.startswith("//") else (By.CSS_SELECTOR, selector)))
-                element.click()
+                if selector.startswith("//"):  # Indicates an XPath selector
+                    button = wait.until(EC.element_to_be_clickable((By.XPATH, selector)))
+                else:  # Defaults to CSS Selector
+                    button = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, selector)))
+                button.click()            
             elif action_type == 'input_field':
-                element = wait.until(EC.visibility_of_element_located((By.XPATH, selector) if selector.startswith("//") else (By.CSS_SELECTOR, selector)))
-                element.send_keys(config['input_value'])
-            elif action_type == 'readable':
-                elements = wait.until(EC.visibility_of_all_elements_located((By.XPATH, selector) if selector.startswith("//") else (By.CSS_SELECTOR, selector)))
-                return [element.text for element in elements]
+                text_to_input = config['input_value']
+                if selector.startswith("//"):  # Indicates an XPath selector
+                    input_field = wait.until(EC.visibility_of_element_located((By.XPATH, selector)))
+                else:  # Defaults to CSS Selector
+                    input_field = wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, selector)))
+                input_field.send_keys(text_to_input)
+            elif action_type == 'readable':        
+                if selector.startswith("//"):  # Indicates an XPath selector
+                    return wait.until(EC.visibility_of_all_elements_located((By.XPATH, selector)))
+                else:  # Defaults to CSS Selector
+                    return wait.until(EC.visibility_of_all_elements_located((By.CSS_SELECTOR, selector)))
             else:
                 raise ValueError(f"Action type '{action_type}' not supported.")
+            print(f"ActionType: {action_type}  -  Selector {selector} ")
         except Exception as e:
-            raise ValueError(f"Action Failed on selector {selector} with error {str(e)}")
+            error_message = str(e)  # Replace this with the actual error message
+            raise ValueError(f"Action Failed on selector {selector}  with error {error_message}")
+            
+            # raise ValueError(f"Action Failed on selector {(config.keys())[0]}: with error ")
+
+
 
     def login(self):
         """Logs into the website using predefined YAML configurations for user interactions."""
@@ -102,7 +117,8 @@ class AutoGPT:
         self.perform_action(config_page['prompt_textarea'])
         self.perform_action(config_page['submit_prompt_button'])
         prompt_response_elements = self.perform_action(config_page['prompt_response_elements'])
-        return prompt_response_elements
+        results = [element.text for element in prompt_response_elements] # extracting values from each of chat bubble
+        return results
     
     def quit(self):
         """Quit Driver upon action done!"""
