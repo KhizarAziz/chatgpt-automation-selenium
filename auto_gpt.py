@@ -64,9 +64,10 @@ class AutoGPT:
         wait = WebDriverWait(self.driver, 15)
         selector = config['selector']
         action_type = config['action']
-        wait_times = config.get('wait_before_action', DEFAULT_WAIT_BEFORE_ACTION_TIME)
-        self.wait_with_random_delay(wait_times) # Random wait before action
+        wait_time_s = config.get('wait_before_action', DEFAULT_WAIT_BEFORE_ACTION_TIME)
+        self.wait_with_random_delay(wait_time_s) # Random wait before action
 
+        print(f"Doing ActionType: {action_type}  -  Selector {selector} , Waiting {wait_time_s} seconds")
         try:
             if action_type == 'clickable':
                 if selector.startswith("//"):  # Indicates an XPath selector
@@ -88,7 +89,6 @@ class AutoGPT:
                     return wait.until(EC.visibility_of_all_elements_located((By.CSS_SELECTOR, selector)))
             else:
                 raise ValueError(f"Action type '{action_type}' not supported.")
-            print(f"ActionType: {action_type}  -  Selector {selector} ")
         except Exception as e:
             error_message = str(e)  # Replace this with the actual error message
             raise ValueError(f"Action Failed on selector {selector}  with error {error_message}")
