@@ -40,8 +40,9 @@ class AutoGPT:
         self.selectors_config = self.load_yaml('element_selectors.yaml')
         print("Setting up Driver ...!")
         self.driver = self.setup_driver()
-        print("Driver setup done, now logging in...!")
+        print("Getting Website...!")
         self.driver.get(main_url)
+        print("Driver setup done, now logging in...!")
         if login_needed:
             self.login()
         print("Login done, now prompting...!")
@@ -91,7 +92,7 @@ class AutoGPT:
                     button = wait.until(EC.element_to_be_clickable((By.XPATH, selector)))
                 else:  # Defaults to CSS Selector
                     button = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, selector)))
-                button.click()            
+                button.click()
             elif action_type == 'input_field':
                 text_to_input = config['input_value']
                 if selector.startswith("//"):  # Indicates an XPath selector

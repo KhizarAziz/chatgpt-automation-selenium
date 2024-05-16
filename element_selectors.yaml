@@ -60,8 +60,9 @@ prompt_page:
     action: "input_field"
     wait_before_action: [5, 7]
   submit_prompt_button:
+    selector: "//button[contains(@class, 'mb-1') and contains(@class, 'mr-1')]"
     # selector: "button[data-testid='send-button']"
-    selector: "button.mb-1.mr-1"  
+    # selector: "button.mb-1.mr-1"
     action: "clickable"
     wait_before_action: [5, 7]
   prompt_response_elements:
