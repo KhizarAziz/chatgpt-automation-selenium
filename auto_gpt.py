@@ -6,7 +6,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from fake_useragent import UserAgent
 from time import sleep
 from random import uniform
-from constants import MAIN_URL, LOGIN_METHOD, MAIL, PASS, CHROME_OPTIONS_ARGS, DEFAULT_WAIT_BEFORE_ACTION_TIME
+from configs import CHROME_OPTIONS_ARGS, DEFAULT_WAIT_BEFORE_ACTION_TIME
 import yaml
 
 class AutoGPT:
@@ -33,12 +33,17 @@ class AutoGPT:
     enter_prompt(prompt_text):
         Enters a prompt into a text area and retrieves the response.
     """
-    def __init__(self):
-        self.driver = self.setup_driver()
+    def __init__(self, main_url, login_email, login_pass, login_type,login_needed):
+        self.login_type = login_type
+        self.email = login_email
+        self.password = login_pass
         self.selectors_config = self.load_yaml('element_selectors.yaml')
+        print("Setting up Driver ...!")
+        self.driver = self.setup_driver()
         print("Driver setup done, now logging in...!")
-        self.driver.get(MAIN_URL)
-        self.login()
+        self.driver.get(main_url)
+        if login_needed:
+            self.login()
         print("Login done, now prompting...!")
 
     def setup_driver(self):
@@ -48,7 +53,19 @@ class AutoGPT:
         chrome_options.add_argument(f"--user-agent={ua.random}")
         for arg in CHROME_OPTIONS_ARGS:
             chrome_options.add_argument(arg)
-        return uc.Chrome(options=chrome_options)
+        try:
+            # Attempt to initialize the Chrome driver
+            driver = uc.Chrome(options=chrome_options)
+        except Exception as e:
+            # Print the error message
+            print(f"Error occurred: {e}")
+            print("------------------------------------------------------------------------------------------------------------")
+            print("# If chrome driver version issue, please update lib : pip install undetected-chromedriver --upgrade")
+            print("#      1.update Chrom Browser: Chrome -> Help -> About Google Chrome -> Update")
+            print("#      2. pip install undetected-chromedriver --upgrade")
+            print("------------------------------------------------------------------------------------------------------------")
+            exit()
+        return driver
 
     def load_yaml(self, file_path):
         """Loads YAML configuration from the specified file."""
@@ -91,7 +108,9 @@ class AutoGPT:
                 raise ValueError(f"Action type '{action_type}' not supported.")
         except Exception as e:
             error_message = str(e)  # Replace this with the actual error message
-            raise ValueError(f"Action Failed on selector {selector}  with error {error_message}")
+            print(f"Action Failed on selector {selector}  with error {error_message}")
+            # raise ValueError()
+            exit()
             
             # raise ValueError(f"Action Failed on selector {(config.keys())[0]}: with error ")
 
@@ -101,12 +120,11 @@ class AutoGPT:
         """Logs into the website using predefined YAML configurations for user interactions."""
         config_page = self.selectors_config['login_page']
         self.perform_action(config_page['login_button'])
-        login_method = LOGIN_METHOD
-        method_elements = config_page[login_method]['elements']
-        method_elements['email_input']['input_value'] = MAIL
+        method_elements = config_page[self.login_type]['elements']
+        method_elements['email_input']['input_value'] = self.email
         self.perform_action(method_elements['email_input'])
         self.perform_action(method_elements['next_button'])
-        method_elements['password_input']['input_value'] = PASS
+        method_elements['password_input']['input_value'] = self.password
         self.perform_action(method_elements['password_input'])
         self.perform_action(method_elements['final_login_button'])
 
