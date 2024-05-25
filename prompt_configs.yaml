@@ -18,3 +18,16 @@ Example: Please write me a prompt to generate all the plot images. Strictly use 
     step 1: write me a story in paragraphs, where each paragraph represents a plot.
     step 2: please write baseline description and all the image gen prompts as a json / dict.
 '''
+
+
+#Frame prompts:
+""" 
+Highlight 3 main keywords (named entities preffered separated by ,) from the given news:
+Meta is reportedly working on AI-powered earphones equipped with cameras. Internally codenamed 'Camerabuds', the earphones will leverage AI capabilities for real-time object identification and foreign language translation. Meta's leadership sees AI-powered earphones as the next logical step in the evolution of wearable technology. It has partnered with Kansas-based electronics company Ear Micro to explore the possibilities of this emerging technology.
+
+Generate 1 Square, Dark, Faded, Bluescale, Sci-fi, AI, Futuristic image, strictly having the following text/logo/girl: Reddit, OpenAI, Data API
+"""
+
+
+# Let's see
+
