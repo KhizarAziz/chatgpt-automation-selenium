@@ -31,11 +31,6 @@ ELEMENT_SELECTORS_YAML_PATH = path.join(PROJECT_ROOT, 'element_selectors.yaml')
 GPT_EMAIL = getenv('GPT_MAIL')
 GPT_PASSWORD = getenv('GPT_PASS')
 
-# Check if either variable is None or empty
-if not GPT_EMAIL or not GPT_PASSWORD:
-    print("GPT_MAIL or GPT_PASS not available in env vars ...!")
-    exit()
-
 
 """---------------------- APP CONFIGS ----------------------"""
 BASELINE_PROMPT = "Please keep the response in 100 words!" # dummy example, not used yet
