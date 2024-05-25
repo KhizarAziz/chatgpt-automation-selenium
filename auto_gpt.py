@@ -6,10 +6,14 @@ from selenium.webdriver.support import expected_conditions as EC
 from fake_useragent import UserAgent
 from time import sleep
 from random import uniform
-from configs import CHROME_OPTIONS_ARGS, DEFAULT_WAIT_BEFORE_ACTION_TIME
+from .configs import CHROME_OPTIONS_ARGS, DEFAULT_WAIT_BEFORE_ACTION_TIME, ELEMENT_SELECTORS_YAML_PATH,GPT_EMAIL,GPT_PASSWORD
 import yaml
+from collections import defaultdict
+
 
 class AutoGPT:
+    
+    
     """
     A class to automate browser actions using Selenium with undetected Chromedriver.
     
@@ -33,18 +37,15 @@ class AutoGPT:
     enter_prompt(prompt_text):
         Enters a prompt into a text area and retrieves the response.
     """
-    def __init__(self, main_url, login_email, login_pass, login_type,login_needed):
-        self.login_type = login_type
-        self.email = login_email
-        self.password = login_pass
-        self.selectors_config = self.load_yaml('element_selectors.yaml')
-        print("Setting up Driver ...!")
+    def __init__(self, main_url,login_needed = False, login_type=''):
+        self.selectors_config = self.load_yaml(ELEMENT_SELECTORS_YAML_PATH)
+        print("Setting up Driver ...! (If taking too long, chromedriver updating on slow internet OR chrome app is currepted (clear default profile)!)")
         self.driver = self.setup_driver()
         print("Getting Website...!")
         self.driver.get(main_url)
         print("Driver setup done, now logging in...!")
         if login_needed:
-            self.login()
+            self.login(login_type)
         print("Login done, now prompting...!")
 
     def setup_driver(self):
@@ -57,6 +58,7 @@ class AutoGPT:
         try:
             # Attempt to initialize the Chrome driver
             driver = uc.Chrome(options=chrome_options)
+            print("driver created..!")
         except Exception as e:
             # Print the error message
             print(f"Error occurred: {e}")
@@ -112,32 +114,57 @@ class AutoGPT:
             print(f"Action Failed on selector {selector}  with error {error_message}")
             # raise ValueError()
             exit()
-            
-            # raise ValueError(f"Action Failed on selector {(config.keys())[0]}: with error ")
 
-
-
-    def login(self):
+    def login(self, login_type) -> None:
         """Logs into the website using predefined YAML configurations for user interactions."""
         config_page = self.selectors_config['login_page']
         self.perform_action(config_page['login_button'])
-        method_elements = config_page[self.login_type]['elements']
-        method_elements['email_input']['input_value'] = self.email
+        method_elements = config_page[login_type]['elements'] # there
+        method_elements['email_input']['input_value'] = GPT_EMAIL
         self.perform_action(method_elements['email_input'])
         self.perform_action(method_elements['next_button'])
-        method_elements['password_input']['input_value'] = self.password
+        method_elements['password_input']['input_value'] = GPT_PASSWORD
         self.perform_action(method_elements['password_input'])
         self.perform_action(method_elements['final_login_button'])
 
-    def enter_prompt(self, prompt_text) -> list :
+    # def enable_temporary_new_chat(self) -> None:
+    #     """This method opens a new chat and enable temporary chat mode."""
+    #     print("Temping chat in 10 sec")
+    #     home_page = self.selectors_config['home_page']
+    #     self.perform_action(home_page['Chat_GPT_dropdown_button']) # clicking new chat button
+    #     print("clicked dropdown")
+    #     self.perform_action(home_page['temporary_chat_switch']) # clicking new chat button        
+    #     print("clicked switch, now sleeping")
+
+
+    def refresh_page_to_start_new_chat(self):
+        # Refresh the page
+        print("refersing page")
+        self.driver.refresh()
+
+    
+    def enter_prompt(self, prompt_text,start_new_chat=False) -> defaultdict:
         """Submits a text prompt on a page and returns the response as text."""
+        if start_new_chat:
+            self.refresh_page_to_start_new_chat()
         config_page = self.selectors_config['prompt_page']
-        config_page['prompt_textarea']['input_value'] = prompt_text
-        self.perform_action(config_page['prompt_textarea'])
-        self.perform_action(config_page['submit_prompt_button'])
-        prompt_response_elements = self.perform_action(config_page['prompt_response_elements'])
-        results = [element.text for element in prompt_response_elements] # extracting values from each of chat bubble
-        return results
+        config_page['prompt_input_text_field']['input_value'] = prompt_text
+        self.perform_action(config_page['prompt_input_text_field'])
+        # self.perform_action(config_page['submit_prompt_button']) # prompt submit button is no more needed!
+        # results = [element.text for element in whole_conversation] # extracting values from each of chat bubble
+        whole_conversation = self.perform_action(config_page['conversation_listview'])
+        last_message_element = whole_conversation[-1]
+        
+        
+        message_dict = defaultdict()
+        message_dict['text'] = last_message_element.text # last message in the gpt chat
+        
+        
+        image_elements = last_message_element.find_elements(By.TAG_NAME, 'img') # Locate all images in last_message_element
+        if len(image_elements) > 0:
+            message_dict['img_url'] = image_elements[-1].get_attribute('src') # getting the last image's source
+            print("Images found: ",message_dict['img_url'])
+        return message_dict
     
     def quit(self):
         """Quit Driver upon action done!"""
