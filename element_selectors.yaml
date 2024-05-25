@@ -51,21 +51,37 @@ login_page:
         action: "clickable"
         wait_before_action: [3, 5]
 
+########################### OPEN NEW TEMPORARY CHAT ##############################
+
+# home_page:
+#   new_chat_button:
+#     #xpath = //*[@id="__next"]/div[1]/div[1]/div/div/div/div/nav/div[1]/span[2]/button/
+#     selector: '//*[@id="__next"]/div[1]/div[2]/main/div[1]/div[1]/div/div[1]/div/div[2]/div[1]/span[2]/button'
+#     action: "clickable"
+#     wait_before_action: [2, 7]
+#   Chat_GPT_dropdown_button:
+#     selector: "//div[starts-with(@id, 'radix-:r')]"
+#     action: "clickable"
+#     wait_before_action: [2, 3]
+#   temporary_chat_switch:
+#     selector: "//div[@role='menuitem']//button[@role='switch']"
+#     action: "clickable"
+#     wait_before_action: [2, 3]    
 
 
 ########################### LOGGED IN - LET'S PROMPT ##############################
 prompt_page:
-  prompt_textarea:
+  prompt_input_text_field:
     selector: "textarea#prompt-textarea"
     action: "input_field"
-    wait_before_action: [5, 7]
-  submit_prompt_button:
-    selector: "//button[contains(@class, 'mb-1') and contains(@class, 'mr-1')]"
-    # selector: "button[data-testid='send-button']"
-    # selector: "button.mb-1.mr-1"
-    action: "clickable"
-    wait_before_action: [5, 7]
-  prompt_response_elements:
-    selector: "div[data-message-id]"
+    wait_before_action: [10, 15]
+  # submit_prompt_button:
+  #   selector: "//button[contains(@class, 'mb-1') and contains(@class, 'mr-1')]"
+  #   # selector: "button[data-testid='send-button']"
+  #   # selector: "button.mb-1.mr-1"
+  #   action: "clickable"
+  #   wait_before_action: [5, 7]
+  conversation_listview:
+    selector: 'div[data-testid^="conversation-turn-"]'
     action: "readable"
-    wait_before_action: [10, 20]
+    wait_before_action: [30, 50]
