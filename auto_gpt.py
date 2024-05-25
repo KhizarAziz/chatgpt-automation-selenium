@@ -6,7 +6,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from fake_useragent import UserAgent
 from time import sleep
 from random import uniform
-from .configs import CHROME_OPTIONS_ARGS, DEFAULT_WAIT_BEFORE_ACTION_TIME, ELEMENT_SELECTORS_YAML_PATH,GPT_EMAIL,GPT_PASSWORD
+from configs import CHROME_OPTIONS_ARGS, DEFAULT_WAIT_BEFORE_ACTION_TIME, ELEMENT_SELECTORS_YAML_PATH,GPT_EMAIL,GPT_PASSWORD
 import yaml
 from collections import defaultdict
 
@@ -37,7 +37,7 @@ class AutoGPT:
     enter_prompt(prompt_text):
         Enters a prompt into a text area and retrieves the response.
     """
-    def __init__(self, main_url,login_needed = False, login_type=''):
+    def __init__(self, main_url, login_needed = False, login_type='login_normal'):
         self.selectors_config = self.load_yaml(ELEMENT_SELECTORS_YAML_PATH)
         print("Setting up Driver ...! (If taking too long, chromedriver updating on slow internet OR chrome app is currepted (clear default profile)!)")
         self.driver = self.setup_driver()
@@ -119,7 +119,11 @@ class AutoGPT:
         """Logs into the website using predefined YAML configurations for user interactions."""
         config_page = self.selectors_config['login_page']
         self.perform_action(config_page['login_button'])
-        method_elements = config_page[login_type]['elements'] # there
+        method_elements = config_page[login_type]['elements'] # there        
+        # Check if either variable is None or empty
+        if not GPT_EMAIL or not GPT_PASSWORD:
+            error_message = "Required environment variables GPT_MAIL or GPT_PASS are not set."
+            raise EnvironmentError(error_message)
         method_elements['email_input']['input_value'] = GPT_EMAIL
         self.perform_action(method_elements['email_input'])
         self.perform_action(method_elements['next_button'])
@@ -164,6 +168,8 @@ class AutoGPT:
         if len(image_elements) > 0:
             message_dict['img_url'] = image_elements[-1].get_attribute('src') # getting the last image's source
             print("Images found: ",message_dict['img_url'])
+        else:
+            message_dict['img_url'] = None
         return message_dict
     
     def quit(self):
