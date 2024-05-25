@@ -6,6 +6,10 @@ Everything is working fine. just run the playground.py script. it will get a res
 
 
 
+### How to run
+* Make sure to add `\n` as suffice to every prompt. This is to submit the prompt.
+
+
 
 ### TBD
 * Submit button's ID is changing, do something about it! 
