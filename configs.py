@@ -34,4 +34,11 @@ GPT_PASSWORD = getenv('GPT_PASS')
 
 """---------------------- APP CONFIGS ----------------------"""
 BASELINE_PROMPT = "Please keep the response in 100 words!" # dummy example, not used yet
-DEFAULT_WAIT_BEFORE_ACTION_TIME = [2, 5]
+
+#Frame prompts:
+""" SAMPLE PROMPT for generating frame from a paragraph.
+Highlight 3 main keywords (named entities preffered separated by ,) from the given news:
+Meta is reportedly working on AI-powered earphones equipped with cameras. Internally codenamed 'Camerabuds', the earphones will leverage AI capabilities for real-time object identification and foreign language translation. Meta's leadership sees AI-powered earphones as the next logical step in the evolution of wearable technology. It has partnered with Kansas-based electronics company Ear Micro to explore the possibilities of this emerging technology.
+
+Generate 1 Square, Dark, Faded, Bluescale, Sci-fi, AI, Futuristic image, strictly having the following text/logo/girl: Reddit, OpenAI, Data API
+"""
