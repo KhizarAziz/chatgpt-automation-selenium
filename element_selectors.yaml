@@ -3,8 +3,9 @@ login_page:
   # General login button used to initiate any login process
   login_button:
     selector: "button[data-testid='login-button']"
-    action: "clickable"
-    wait_before_action: [3, 5]    
+    selector_type: "button"
+    action: "click"
+    default_wait_before_action: 5
   
   # Configuration for logging in with Google
   login_with_google:
@@ -12,26 +13,30 @@ login_page:
       # Button to initiate login with Google
       login_with_google_button:
         selector: ".social-section .social-btn:first-of-type"
-        action: "clickable"
-        wait_before_action: [3, 5]        
+        action: "click"
+        default_wait_before_action: 5
       # Input field for email
       email_input:
         selector: "input[name='identifier']"
-        action: "input_field"
+        selector_type: "input_field"
+        action: "input_text"
       # Button to proceed after email is entered
       next_button:
         selector: "//div[@id='identifierNext']//button"
-        action: "clickable"
-        wait_before_action: [3, 5]
+        selector_type: "button"
+        action: "click"
+        default_wait_before_action: 5
       # Input field for password
       password_input:
         selector: "input[name='Passwd']"
-        action: "input_field"
+        selector_type: "input_field"
+        action: "input_text"
       # Final button to complete the login process
       final_login_button:
         selector: "//div[@id='passwordNext']//button"
-        action: "clickable"
-        wait_before_action: [3, 5]
+        selector_type: "button"
+        action: "click"
+        default_wait_before_action: 5
 
   # Configuration for normal login process
   login_normal:
@@ -39,17 +44,21 @@ login_page:
       # Fields and buttons used in the normal login process
       email_input:
         selector: "input[name='email']"  # or use XPath "//input[@name='email']"
-        action: "input_field"
+        selector_type: "input_field"
+        action: "input_text"
       next_button:
         selector: "//button[contains(text(), 'Continue')]"  # or use CSS "button.continue-btn"
-        action: "clickable"
+        selector_type: "button"
+        action: "click"
       password_input:
-        selector: "input[name='password']"  # or use XPath "//form[contains(@class, '_form-login-password')]//input[@name='password']"
-        action: "input_field"
+        selector: "input[name='password']"  # or use XPath "//form[contains(@class, '_form-login-password')]//input[@name='password']",
+        selector_type: "input_field"
+        action: "input_text"
       final_login_button:
         selector: "button._button-login-password[type='submit']"  # or use XPath "//form[contains(@class, '_form-login-password')]//button[@type='submit'][@name='action'][@value='default']"
-        action: "clickable"
-        wait_before_action: [3, 5]
+        selector_type: "button"
+        action: "click"
+        default_wait_before_action: 5
 
 ########################### OPEN NEW TEMPORARY CHAT ##############################
 
@@ -57,31 +66,33 @@ login_page:
 #   new_chat_button:
 #     #xpath = //*[@id="__next"]/div[1]/div[1]/div/div/div/div/nav/div[1]/span[2]/button/
 #     selector: '//*[@id="__next"]/div[1]/div[2]/main/div[1]/div[1]/div/div[1]/div/div[2]/div[1]/span[2]/button'
-#     action: "clickable"
-#     wait_before_action: [2, 7]
+#     action: "click"
+#     default_wait_before_action: 5
 #   Chat_GPT_dropdown_button:
 #     selector: "//div[starts-with(@id, 'radix-:r')]"
-#     action: "clickable"
-#     wait_before_action: [2, 3]
+#     action: "click"
+#     default_wait_before_action: 5
 #   temporary_chat_switch:
 #     selector: "//div[@role='menuitem']//button[@role='switch']"
-#     action: "clickable"
-#     wait_before_action: [2, 3]    
+#     action: "click"
+#     default_wait_before_action: 5
 
 
 ########################### LOGGED IN - LET'S PROMPT ##############################
 prompt_page:
   prompt_input_text_field:
     selector: "textarea#prompt-textarea"
-    action: "input_field"
-    wait_before_action: [10, 15]
+    selector_type: "input_field"
+    action: "input_text"
+    default_wait_before_action: 5
   # submit_prompt_button:
   #   selector: "//button[contains(@class, 'mb-1') and contains(@class, 'mr-1')]"
   #   # selector: "button[data-testid='send-button']"
   #   # selector: "button.mb-1.mr-1"
-  #   action: "clickable"
-  #   wait_before_action: [5, 7]
+  #   action: "click"
+  #   default_wait_before_action: 5
   conversation_listview:
     selector: 'div[data-testid^="conversation-turn-"]'
-    action: "readable"
-    wait_before_action: [30, 50]
+    selector_type: "conversation_list"
+    action: "extract_conversation"
+    default_wait_before_action: 10
