@@ -6,7 +6,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from fake_useragent import UserAgent
 from time import sleep
 from random import uniform
-from .configs import CHROME_OPTIONS_ARGS, ELEMENT_SELECTORS_YAML_PATH,GPT_EMAIL,GPT_PASSWORD
+from .configs import CHROME_OPTIONS_ARGS, ELEMENT_SELECTORS_YAML_PATH,GPT_EMAIL,GPT_PASSWORD, BASE_URL
 import yaml
 from collections import defaultdict
 
@@ -37,12 +37,12 @@ class AutoGPT:
     enter_prompt(prompt_text):
         Enters a prompt into a text area and retrieves the response.
     """
-    def __init__(self, main_url, login_needed = False, login_type='login_normal'):
+    def __init__(self, login_needed = False, login_type='login_normal'):
         self.selectors_config = self.load_yaml(ELEMENT_SELECTORS_YAML_PATH)
-        print("Setting up Driver ...! (If taking too long, chromedriver updating on slow internet OR chrome app is currepted (clear default profile)!)")
+        print("Setting up Driver ...! (If taking too long, chromedriver updating on slow internet OR chrome app is currepted (Run: rm -rf ~/Library/Application\ Support/Google/Chrome/Default)!)")
         self.driver = self.setup_driver()
         print("Getting Website...!")
-        self.driver.get(main_url)
+        self.driver.get(BASE_URL)
         print("Driver setup done, now logging in...!")
         if login_needed:
             self.login(login_type)
@@ -63,8 +63,8 @@ class AutoGPT:
             # Print the error message
             print(f"Error occurred: {e}")
             print("------------------------------------------------------------------------------------------------------------")
-            print("# If chrome driver version issue, please update lib : pip install undetected-chromedriver --upgrade")
-            print("#      1.update Chrom Browser: Chrome -> Help -> About Google Chrome -> Update")
+            print("# If chrome driver version issue, please update lib :")
+            print("#      1. Update Chrom Browser: Chrome -> Help -> About Google Chrome -> Update")
             print("#      2. pip install undetected-chromedriver --upgrade")
             print("------------------------------------------------------------------------------------------------------------")
             exit()
@@ -171,7 +171,8 @@ class AutoGPT:
     def refresh_page_to_start_new_chat(self):
         # Refresh the page
         print("Refershing page")
-        self.driver.refresh()
+        # self.driver.refresh()
+        self.driver.get(BASE_URL)
 
     
     def quit(self):
