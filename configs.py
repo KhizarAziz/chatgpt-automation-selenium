@@ -43,3 +43,10 @@ Meta is reportedly working on AI-powered earphones equipped with cameras. Intern
 
 Generate 1 Square, Dark, Fade, Bluescale, Sci-fi, AI, Futuristic image, strictly having the following text/logo/girl: Reddit, OpenAI, Data API
 """
+
+# TODO: Use following prompt for improving news:
+"""
+Make this news as easy as possible with some added background information for the highly technical or uncommon jorgons/names used in the news.
+Make it very noob friendly. Feel free to use internet for gaining knowledge but dont tell me sources.
+Keep everything in a paragraph:
+"""
